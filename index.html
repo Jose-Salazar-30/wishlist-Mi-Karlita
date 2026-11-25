@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nuestra Wishlist 💜 | José & Elizabeth</title>
+  <title>Nuestra Wishlist 💜 | Buliancito & Mi Karlita</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
   <style>
@@ -36,7 +36,7 @@
       padding-bottom: 4.5rem;
     }
 
-    /* Pantalla de bloqueo / Selección de identidad */
+    /* Pantalla de bloqueo / PIN individual */
     .lock-screen {
       position: fixed;
       inset: 0;
@@ -80,33 +80,6 @@
       color: var(--muted);
       font-size: 0.9rem;
       margin-bottom: 1.4rem;
-    }
-    .who-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin-bottom: 1.1rem;
-    }
-    .who-btn {
-      border: 2px solid var(--border);
-      background: #faf7ff;
-      border-radius: 16px;
-      padding: 0.9rem 0.5rem;
-      cursor: pointer;
-      font-family: inherit;
-      font-weight: 700;
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.4rem;
-      transition: all 0.2s ease;
-    }
-    .who-btn.selected {
-      border-color: var(--primary);
-      background: var(--primary-soft);
-      color: var(--primary);
-      box-shadow: 0 6px 16px rgba(124, 58, 237, 0.18);
     }
     .pin-input {
       width: 100%;
@@ -577,11 +550,11 @@
 </head>
 <body>
 
-  <!-- Pantalla de acceso con identidad y PIN -->
+  <!-- Pantalla de acceso con PIN personal -->
   <div class="lock-screen" id="lockScreen">
     <div class="lock-card">
       <div class="bt21-parade" id="paradeContainer"></div>
-      <h2>José & Elizabeth 💜</h2>
+      <h2>Buliancito & Mi Karlita 💜</h2>
       <p>Ingresa tu PIN personal para entrar y mantener activado el <strong>Modo Sorpresa</strong>.</p>
 
       <input type="password" inputmode="numeric" maxlength="6" class="pin-input" id="pinInput" placeholder="••••" onkeydown="if(event.key==='Enter') unlockApp()" />
@@ -596,7 +569,7 @@
   <!-- Header Principal -->
   <header>
     <div class="top-bar">
-      <button class="user-pill" onclick="switchIdentityPrompt()" title="Cambiar quién está viendo la página">
+      <button class="user-pill" onclick="switchIdentityPrompt()" title="Cambiar de usuario">
         <span id="currentUserBadge">💜 Hola</span> · Cambiar
       </button>
       <button class="countdown-pill" id="countdownDisplay" onclick="openEventModal()">
@@ -604,12 +577,12 @@
       </button>
     </div>
 
-    <h1>José & Elizabeth</h1>
+    <h1>Buliancito & Mi Karlita</h1>
     <p>Borahae 💜 — Nuestro rincón para guardar deseos, pistas y detalles especiales.</p>
 
     <div class="tabs-wrapper">
-      <button class="tab-btn active" data-tab="ella" onclick="switchTab('ella')">🐰 Lista de Elizabeth</button>
-      <button class="tab-btn" data-tab="el" onclick="switchTab('el')">❤️ Lista de José</button>
+      <button class="tab-btn active" data-tab="ella" onclick="switchTab('ella')">🐰 Lista de Mi Karlita</button>
+      <button class="tab-btn" data-tab="el" onclick="switchTab('el')">❤️ Lista de Buliancito</button>
       <button class="tab-btn" data-tab="recuerdos" onclick="switchTab('recuerdos')">🎁 Cumplidos</button>
     </div>
     <div class="sync-status" id="syncStatus">Conectando con la nube...</div>
@@ -649,8 +622,8 @@
           <div class="form-group">
             <label>¿Para quién es?</label>
             <select id="wOwner" required>
-              <option value="ella">Elizabeth</option>
-              <option value="el">José</option>
+              <option value="ella">Mi Karlita</option>
+              <option value="el">Buliancito</option>
             </select>
           </div>
           <div class="form-group">
@@ -742,12 +715,12 @@
 
   <script>
     // =========================================================================
-    // CONFIGURACIÓN DE ACCESO Y FIREBASE
+    // PIN INDIVIDUAL POR PERSONA Y CONFIGURACIÓN DE FIREBASE
     // =========================================================================
     const USER_PINS = {
-      "3010": "el",   // PIN exclusivo de José
-      "3003": "ella"  // PIN exclusivo de Elizabeth
-    }; // Cambia este PIN de 4 dígitos si deseas otro
+      "3010": "el",   // PIN exclusivo de Buliancito
+      "3003": "ella"  // PIN exclusivo de Mi Karlita
+    };
 
     const firebaseConfig = {
       apiKey: "AIzaSyCxGwx_pWRCwAhOA-DMVaH2dTB-tRPMMx4",
@@ -794,7 +767,6 @@
 
     // Estado global
     let loggedUser = sessionStorage.getItem('wishlist_user') || null; // 'ella' | 'el'
-    let pendingIdentity = 'ella';
     let currentTab = 'ella'; // 'ella' | 'el' | 'recuerdos'
     let selectedCharacter = 'cooky';
     let items = [];
@@ -806,8 +778,6 @@
     // Inicializar elementos visuales de BT21
     function initVisuals() {
       document.getElementById('paradeContainer').innerHTML = Object.values(BT21).map(c => c.svg).join('');
-      document.getElementById('iconElla').innerHTML = `<div style="width:36px;height:36px;">${BT21.cooky.svg}</div>`;
-      document.getElementById('iconEl').innerHTML = `<div style="width:36px;height:36px;">${BT21.tata.svg}</div>`;
 
       const selector = document.getElementById('bt21Selector');
       selector.innerHTML = Object.entries(BT21).map(([key, val]) => `
@@ -823,13 +793,7 @@
       }
     }
 
-    function selectIdentity(who) {
-      pendingIdentity = who;
-      document.getElementById('whoElla').classList.toggle('selected', who === 'ella');
-      document.getElementById('whoEl').classList.toggle('selected', who === 'el');
-    }
-
-function unlockApp() {
+    function unlockApp() {
       const pin = document.getElementById('pinInput').value.trim();
       const detectedUser = USER_PINS[pin];
 
@@ -844,18 +808,20 @@ function unlockApp() {
       document.getElementById('pinInput').value = '';
       document.getElementById('pinError').textContent = '';
 
-      // Abre directamente la lista de la pareja para inspirarse
+      // Por defecto abrir la lista de la pareja para inspirarse
       switchTab(loggedUser === 'ella' ? 'el' : 'ella');
       updateUserBadge();
     }
 
     function switchIdentityPrompt() {
+      sessionStorage.removeItem('wishlist_user');
+      loggedUser = null;
       document.getElementById('lockScreen').classList.remove('hidden');
     }
 
     function updateUserBadge() {
       const badge = document.getElementById('currentUserBadge');
-      badge.textContent = loggedUser === 'ella' ? '🐰 Hola, Elizabeth' : '❤️ Hola, José';
+      badge.textContent = loggedUser === 'ella' ? '🐰 Hola, Mi Karlita' : '❤️ Hola, Buliancito';
     }
 
     function chooseCharacter(key) {
@@ -1046,7 +1012,7 @@ function unlockApp() {
 
         grid.innerHTML = fulfilledList.map(item => {
           const charObj = BT21[item.character] || BT21.cooky;
-          const whoName = item.owner === 'ella' ? 'Para Elizabeth' : 'Para José';
+          const whoName = item.owner === 'ella' ? 'Para Mi Karlita' : 'Para Buliancito';
           return `
             <article class="card fulfilled-card">
               <div class="card-top-media">
@@ -1070,7 +1036,7 @@ function unlockApp() {
         return;
       }
 
-      // Pestañas de Elizabeth o José
+      // Pestañas de Mi Karlita o Buliancito
       const isViewingOwnList = (loggedUser === currentTab);
       const ownerItems = items.filter(i => i.owner === currentTab && !i.fulfilled);
       const filtered = ownerItems.filter(i => filterPrio === 'todas' || i.priority === filterPrio);
@@ -1080,7 +1046,7 @@ function unlockApp() {
         rouletteBtn.style.display = 'none';
         statsArea.innerHTML = `<span>Tus deseos activos: <strong>${ownerItems.length}</strong></span>`;
       } else {
-        const partnerName = currentTab === 'ella' ? 'Elizabeth' : 'José';
+        const partnerName = currentTab === 'ella' ? 'Mi Karlita' : 'Buliancito';
         const reservedCount = ownerItems.filter(i => i.reserved).length;
         banner.innerHTML = `<span>✨ Estás viendo la lista de <strong>${partnerName}</strong>. Puedes apartar regalos en secreto sin que lo vea.</span>`;
         rouletteBtn.style.display = 'inline-flex';
