@@ -582,18 +582,7 @@
     <div class="lock-card">
       <div class="bt21-parade" id="paradeContainer"></div>
       <h2>José & Elizabeth 💜</h2>
-      <p>Selecciona quién está entrando para activar el <strong>Modo Sorpresa</strong> y proteger sus regalos.</p>
-
-      <div class="who-grid">
-        <button type="button" class="who-btn selected" id="whoElla" onclick="selectIdentity('ella')">
-          <span id="iconElla"></span>
-          <span>Soy Elizabeth</span>
-        </button>
-        <button type="button" class="who-btn" id="whoEl" onclick="selectIdentity('el')">
-          <span id="iconEl"></span>
-          <span>Soy José</span>
-        </button>
-      </div>
+      <p>Ingresa tu PIN personal para entrar y mantener activado el <strong>Modo Sorpresa</strong>.</p>
 
       <input type="password" inputmode="numeric" maxlength="6" class="pin-input" id="pinInput" placeholder="••••" onkeydown="if(event.key==='Enter') unlockApp()" />
       <div class="pin-error" id="pinError"></div>
@@ -755,7 +744,10 @@
     // =========================================================================
     // CONFIGURACIÓN DE ACCESO Y FIREBASE
     // =========================================================================
-    const ACCESS_PIN = "3010"; // Cambia este PIN de 4 dígitos si deseas otro
+    const USER_PINS = {
+      "3010": "el",   // PIN exclusivo de José
+      "3003": "ella"  // PIN exclusivo de Elizabeth
+    }; // Cambia este PIN de 4 dígitos si deseas otro
 
     const firebaseConfig = {
       apiKey: "AIzaSyCxGwx_pWRCwAhOA-DMVaH2dTB-tRPMMx4",
@@ -837,18 +829,22 @@
       document.getElementById('whoEl').classList.toggle('selected', who === 'el');
     }
 
-    function unlockApp() {
+function unlockApp() {
       const pin = document.getElementById('pinInput').value.trim();
-      if (pin !== ACCESS_PIN) {
+      const detectedUser = USER_PINS[pin];
+
+      if (!detectedUser) {
         document.getElementById('pinError').textContent = 'PIN incorrecto, intenta de nuevo 💜';
         return;
       }
-      loggedUser = pendingIdentity;
+
+      loggedUser = detectedUser;
       sessionStorage.setItem('wishlist_user', loggedUser);
       document.getElementById('lockScreen').classList.add('hidden');
       document.getElementById('pinInput').value = '';
       document.getElementById('pinError').textContent = '';
-      // Por defecto abrir la lista de la pareja para inspirarse
+
+      // Abre directamente la lista de la pareja para inspirarse
       switchTab(loggedUser === 'ella' ? 'el' : 'ella');
       updateUserBadge();
     }
