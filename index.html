@@ -3,134 +3,279 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nuestra Wishlist ✨ | José & Elizabeth</title>
+  <title>Nuestra Wishlist 💜 | José & Elizabeth</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #faf8f6;
+      --bg: #f7f3fc;
       --surface: #ffffff;
-      --text: #1e1b18;
-      --muted: #6e655f;
-      --border: #ebe4de;
-      --primary: #c96a5b;
-      --primary-hover: #b35849;
-      --accent-her: #d9778b;
-      --accent-him: #4a7c8c;
-      --success: #2e8b6e;
-      --warning: #d9822b;
-      --shadow: 0 10px 30px -10px rgba(30, 27, 24, 0.08);
-      --radius: 18px;
+      --text: #221833;
+      --muted: #6b5b84;
+      --border: #e5daf5;
+      --primary: #7c3aed;
+      --primary-hover: #6d28d9;
+      --primary-soft: #f1e9fe;
+      --pink: #ec4899;
+      --pink-soft: #fce7f3;
+      --success: #10b981;
+      --success-soft: #d1fae5;
+      --shadow: 0 12px 32px -10px rgba(88, 28, 135, 0.12);
+      --radius: 20px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg);
+      background-image:
+        radial-gradient(at 10% 10%, rgba(168, 85, 247, 0.10) 0px, transparent 50%),
+        radial-gradient(at 90% 15%, rgba(236, 72, 153, 0.08) 0px, transparent 50%);
       color: var(--text);
       min-height: 100vh;
-      padding-bottom: 4rem;
+      padding-bottom: 4.5rem;
+    }
+
+    /* Pantalla de bloqueo / Selección de identidad */
+    .lock-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #2e1065 0%, #581c87 50%, #831843 100%);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+    }
+    .lock-screen.hidden { display: none; }
+    .lock-card {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      max-width: 430px;
+      width: 100%;
+      border-radius: 28px;
+      padding: 2.25rem 1.75rem;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+    }
+    .bt21-parade {
+      display: flex;
+      justify-content: center;
+      gap: 0.45rem;
+      margin-bottom: 1rem;
+    }
+    .bt21-parade svg {
+      width: 34px;
+      height: 34px;
+      transition: transform 0.2s ease;
+    }
+    .bt21-parade svg:hover { transform: translateY(-4px) scale(1.1); }
+    .lock-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.85rem;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+    .lock-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.4rem;
+    }
+    .who-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.1rem;
+    }
+    .who-btn {
+      border: 2px solid var(--border);
+      background: #faf7ff;
+      border-radius: 16px;
+      padding: 0.9rem 0.5rem;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+    .who-btn.selected {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary);
+      box-shadow: 0 6px 16px rgba(124, 58, 237, 0.18);
+    }
+    .pin-input {
+      width: 100%;
+      text-align: center;
+      letter-spacing: 8px;
+      font-size: 1.35rem;
+      font-weight: 700;
+      padding: 0.75rem;
+      border-radius: 14px;
+      border: 2px solid var(--border);
+      margin-bottom: 1rem;
+      outline: none;
+    }
+    .pin-input:focus { border-color: var(--primary); }
+    .pin-error {
+      color: #e11d48;
+      font-size: 0.82rem;
+      font-weight: 600;
+      min-height: 20px;
+      margin-bottom: 0.5rem;
     }
 
     /* Header */
     header {
-      background: linear-gradient(135deg, #fff6f3 0%, #f4f8fa 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 2.5rem 1.25rem 2rem;
+      background: linear-gradient(135deg, #3b0764 0%, #6b21a8 55%, #9d174d 100%);
+      color: #fff;
+      padding: 2rem 1.25rem 2.25rem;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-    .badge-top {
-      display: inline-block;
-      background: #fff;
-      border: 1px solid var(--border);
+    .top-bar {
+      max-width: 1040px;
+      margin: 0 auto 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .user-pill {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+    }
+    .user-pill:hover { background: rgba(255,255,255,0.25); }
+    .countdown-pill {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.25);
       padding: 0.35rem 0.9rem;
       border-radius: 999px;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 0.75rem;
-      letter-spacing: 0.5px;
+      cursor: pointer;
     }
+    .countdown-pill:hover { background: rgba(255,255,255,0.25); }
+
     h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 4vw, 2.75rem);
-      color: var(--text);
-      margin-bottom: 0.5rem;
+      font-size: clamp(2.1rem, 4.5vw, 3rem);
+      margin-bottom: 0.45rem;
+      letter-spacing: -0.5px;
     }
     header p {
-      color: var(--muted);
-      max-width: 520px;
-      margin: 0 auto 1.5rem;
+      color: rgba(255, 255, 255, 0.86);
+      max-width: 540px;
+      margin: 0 auto 1.4rem;
       font-size: 0.95rem;
-      line-height: 1.5;
     }
 
-    /* Switcher de Usuario */
+    /* Switcher de listas */
     .tabs-wrapper {
       display: inline-flex;
-      background: #eee7e1;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
       padding: 0.35rem;
       border-radius: 999px;
       gap: 0.35rem;
+      border: 1px solid rgba(255,255,255,0.2);
     }
     .tab-btn {
       border: none;
       background: transparent;
-      padding: 0.65rem 1.5rem;
+      padding: 0.65rem 1.35rem;
       border-radius: 999px;
       font-family: inherit;
-      font-weight: 600;
-      font-size: 0.95rem;
+      font-weight: 700;
+      font-size: 0.92rem;
       cursor: pointer;
-      color: var(--muted);
+      color: rgba(255,255,255,0.85);
       transition: all 0.25s ease;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 0.5rem;
     }
     .tab-btn.active {
-      background: var(--surface);
-      color: var(--text);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      background: #ffffff;
+      color: var(--primary);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    }
+    .sync-status {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.8);
+      margin-top: 0.85rem;
     }
 
     /* Contenedor Principal */
     .container {
-      max-width: 1020px;
-      margin: 2rem auto 0;
+      max-width: 1060px;
+      margin: 1.75rem auto 0;
       padding: 0 1.25rem;
     }
 
-    /* Barra de herramientas y estadísticas */
+    /* Banner de Modo Sorpresa */
+    .surprise-banner {
+      background: linear-gradient(90deg, #f3e8ff 0%, #fce7f3 100%);
+      border: 1px solid #e9d5ff;
+      color: #581c87;
+      padding: 0.85rem 1.2rem;
+      border-radius: 16px;
+      font-size: 0.88rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    /* Toolbar */
     .toolbar {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       gap: 1rem;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.65rem;
       background: var(--surface);
-      padding: 1.1rem 1.4rem;
+      padding: 1rem 1.35rem;
       border-radius: var(--radius);
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
     }
     .stats {
       display: flex;
-      gap: 1.5rem;
+      gap: 1.35rem;
       font-size: 0.9rem;
+      flex-wrap: wrap;
     }
-    .stats span strong { color: var(--text); font-size: 1.05rem; }
     .stats span { color: var(--muted); }
+    .stats span strong { color: var(--primary); font-size: 1.05rem; }
 
     .actions {
       display: flex;
-      gap: 0.75rem;
+      gap: 0.65rem;
       flex-wrap: wrap;
+      align-items: center;
     }
     select, .btn {
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 600;
       border-radius: 12px;
       padding: 0.65rem 1.1rem;
       border: 1px solid var(--border);
@@ -138,23 +283,30 @@
       color: var(--text);
       cursor: pointer;
       transition: all 0.2s ease;
-    }
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      font-weight: 600;
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
     }
-    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .btn:hover, select:hover { border-color: var(--primary); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, #9333ea 100%);
+      color: #fff;
+      border: none;
+      box-shadow: 0 6px 16px rgba(124, 58, 237, 0.25);
+    }
+    .btn-primary:hover { transform: translateY(-1px); opacity: 0.95; }
+    .btn-roulette {
+      background: var(--pink-soft);
+      color: #be185d;
+      border: 1px solid #fbcfe8;
+    }
+    .btn-roulette:hover { background: #fbcfe8; }
 
     /* Grid de Regalos */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-      gap: 1.35rem;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.4rem;
     }
     .card {
       background: var(--surface);
@@ -164,26 +316,55 @@
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
-      transition: transform 0.2s ease;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
       position: relative;
     }
-    .card:hover { transform: translateY(-4px); }
-    .card.reserved {
-      border-color: #b7dfd2;
-      background: #fafdfb;
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 36px -12px rgba(88, 28, 135, 0.18);
+    }
+    .card.reserved-visible {
+      border: 2px solid #6ee7b7;
+      background: #f6fefb;
+    }
+    .card.fulfilled-card {
+      opacity: 0.92;
+      border-color: #ddd6fe;
     }
 
-    .card-img {
+    .card-top-media {
+      position: relative;
       width: 100%;
       height: 185px;
-      object-fit: cover;
-      background: #f2ece7;
+      background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--muted);
-      font-size: 2.5rem;
     }
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bt21-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.25rem 0.65rem 0.25rem 0.35rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+    .bt21-badge svg { width: 22px; height: 22px; }
+
     .card-body {
       padding: 1.25rem;
       flex: 1;
@@ -198,19 +379,19 @@
       gap: 0.5rem;
     }
     .pill {
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.25rem 0.65rem;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 0.26rem 0.7rem;
       border-radius: 999px;
     }
-    .prio-alta { background: #fde8e8; color: #c53030; }
-    .prio-media { background: #fef3c7; color: #b45309; }
-    .prio-baja { background: #e0f2fe; color: #0369a1; }
+    .prio-alta { background: #fce7f3; color: #be185d; }
+    .prio-media { background: #f3e8ff; color: #7e22ce; }
+    .prio-baja { background: #e0e7ff; color: #4338ca; }
 
     .price {
-      font-weight: 700;
+      font-weight: 800;
       font-size: 0.95rem;
-      color: var(--text);
+      color: var(--primary);
     }
     .card-title {
       font-size: 1.12rem;
@@ -222,104 +403,133 @@
       font-size: 0.88rem;
       color: var(--muted);
       line-height: 1.45;
-      margin-bottom: 1.1rem;
+      margin-bottom: 0.9rem;
       flex: 1;
+    }
+
+    /* Reacciones */
+    .reactions-row {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 0.9rem;
+      flex-wrap: wrap;
+    }
+    .react-chip {
+      border: 1px solid var(--border);
+      background: #faf7ff;
+      border-radius: 999px;
+      padding: 0.22rem 0.6rem;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.15s ease;
+    }
+    .react-chip.active {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      color: var(--primary);
     }
 
     .card-footer {
       display: flex;
-      gap: 0.5rem;
-      padding-top: 0.9rem;
+      gap: 0.45rem;
+      padding-top: 0.85rem;
       border-top: 1px solid var(--border);
       align-items: center;
+      flex-wrap: wrap;
     }
     .btn-sm {
-      padding: 0.5rem 0.8rem;
-      font-size: 0.82rem;
-      font-weight: 600;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 700;
       border-radius: 10px;
       text-decoration: none;
       text-align: center;
+      cursor: pointer;
     }
     .btn-link {
-      background: #f5f0ec;
-      color: var(--text);
+      background: var(--primary-soft);
+      color: var(--primary);
       border: none;
     }
-    .btn-link:hover { background: #eae2db; }
     .btn-reserve {
       flex: 1;
-      background: #eef7f4;
-      color: var(--success);
-      border: 1px solid #cce8df;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
     }
     .btn-reserve.active {
       background: var(--success);
       color: #fff;
       border-color: var(--success);
     }
-    .btn-delete {
+    .btn-fulfill {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+    .btn-icon {
       background: transparent;
       border: none;
-      color: #a89f99;
-      padding: 0.45rem;
+      color: #9ca3af;
+      padding: 0.4rem;
       font-size: 1rem;
+      cursor: pointer;
     }
-    .btn-delete:hover { color: #c53030; }
+    .btn-icon:hover { color: #e11d48; }
 
     .empty-state {
       grid-column: 1 / -1;
       text-align: center;
-      padding: 4rem 1.5rem;
+      padding: 3.75rem 1.5rem;
       background: var(--surface);
       border-radius: var(--radius);
-      border: 1px dashed var(--border);
+      border: 2px dashed var(--border);
       color: var(--muted);
     }
 
-    /* Modal */
+    /* Modales */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(20, 17, 15, 0.55);
-      backdrop-filter: blur(4px);
+      background: rgba(34, 24, 51, 0.6);
+      backdrop-filter: blur(5px);
       display: none;
       align-items: center;
       justify-content: center;
       padding: 1rem;
-      z-index: 100;
+      z-index: 200;
     }
     .modal-backdrop.open { display: flex; }
     .modal {
       background: var(--surface);
       width: 100%;
-      max-width: 480px;
-      border-radius: 22px;
+      max-width: 500px;
+      border-radius: 24px;
       padding: 1.75rem;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-      animation: pop 0.2s ease;
-    }
-    @keyframes pop {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+      max-height: 92vh;
+      overflow-y: auto;
     }
     .modal h2 {
       font-family: 'Playfair Display', serif;
       margin-bottom: 1.1rem;
-      font-size: 1.5rem;
+      font-size: 1.55rem;
+      color: var(--text);
     }
     .form-group { margin-bottom: 0.95rem; }
     .form-group label {
       display: block;
-      font-size: 0.83rem;
-      font-weight: 600;
+      font-size: 0.82rem;
+      font-weight: 700;
       margin-bottom: 0.35rem;
       color: var(--muted);
     }
     .form-group input, .form-group select, .form-group textarea {
       width: 100%;
       padding: 0.65rem 0.85rem;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid var(--border);
       font-family: inherit;
       font-size: 0.92rem;
@@ -329,57 +539,122 @@
       grid-template-columns: 1fr 1fr;
       gap: 0.75rem;
     }
+
+    /* Selector visual de personajes BT21 */
+    .bt21-selector {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+    .bt21-option {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 0.45rem 0.25rem;
+      text-align: center;
+      cursor: pointer;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: #faf7ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .bt21-option.selected {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+    .bt21-option svg { width: 28px; height: 28px; }
+
     .modal-actions {
       display: flex;
       justify-content: flex-end;
       gap: 0.65rem;
       margin-top: 1.35rem;
     }
-    .sync-status {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 0.75rem;
-    }
   </style>
 </head>
 <body>
 
+  <!-- Pantalla de acceso con identidad y PIN -->
+  <div class="lock-screen" id="lockScreen">
+    <div class="lock-card">
+      <div class="bt21-parade" id="paradeContainer"></div>
+      <h2>José & Elizabeth 💜</h2>
+      <p>Selecciona quién está entrando para activar el <strong>Modo Sorpresa</strong> y proteger sus regalos.</p>
+
+      <div class="who-grid">
+        <button type="button" class="who-btn selected" id="whoElla" onclick="selectIdentity('ella')">
+          <span id="iconElla"></span>
+          <span>Soy Elizabeth</span>
+        </button>
+        <button type="button" class="who-btn" id="whoEl" onclick="selectIdentity('el')">
+          <span id="iconEl"></span>
+          <span>Soy José</span>
+        </button>
+      </div>
+
+      <input type="password" inputmode="numeric" maxlength="6" class="pin-input" id="pinInput" placeholder="••••" onkeydown="if(event.key==='Enter') unlockApp()" />
+      <div class="pin-error" id="pinError"></div>
+
+      <button type="button" class="btn btn-primary" style="width:100%; justify-content:center; padding:0.85rem;" onclick="unlockApp()">
+        Entrar a nuestra Wishlist ✨
+      </button>
+    </div>
+  </div>
+
+  <!-- Header Principal -->
   <header>
-    <span class="badge-top">✨ NUESTRA LISTA COMPARTIDA</span>
+    <div class="top-bar">
+      <button class="user-pill" onclick="switchIdentityPrompt()" title="Cambiar quién está viendo la página">
+        <span id="currentUserBadge">💜 Hola</span> · Cambiar
+      </button>
+      <button class="countdown-pill" id="countdownDisplay" onclick="openEventModal()">
+        📅 Configurar próxima fecha especial
+      </button>
+    </div>
+
     <h1>José & Elizabeth</h1>
-    <p>Un espacio para guardar ideas de regalos, detalles especiales y cosas que nos harían ilusión recibir.</p>
+    <p>Borahae 💜 — Nuestro rincón para guardar deseos, pistas y detalles especiales.</p>
 
     <div class="tabs-wrapper">
-      <button class="tab-btn active" data-owner="ella" onclick="switchOwner('ella')">🌷 Lista de Elizabeth</button>
-      <button class="tab-btn" data-owner="el" onclick="switchOwner('el')">🚀 Lista de José</button>
+      <button class="tab-btn active" data-tab="ella" onclick="switchTab('ella')">🐰 Lista de Elizabeth</button>
+      <button class="tab-btn" data-tab="el" onclick="switchTab('el')">❤️ Lista de José</button>
+      <button class="tab-btn" data-tab="recuerdos" onclick="switchTab('recuerdos')">🎁 Cumplidos</button>
     </div>
-    <div class="sync-status" id="syncStatus">Modo local activo (listo para conectar Firebase)</div>
+    <div class="sync-status" id="syncStatus">Conectando con la nube...</div>
   </header>
 
   <main class="container">
+    <!-- Banner informativo del Modo Sorpresa -->
+    <div class="surprise-banner" id="surpriseBanner"></div>
+
+    <!-- Barra de estadísticas y acciones -->
     <div class="toolbar">
-      <div class="stats">
-        <span>Deseos: <strong id="statTotal">0</strong></span>
-        <span>Apartados: <strong id="statReserved">0</strong></span>
-      </div>
+      <div class="stats" id="statsArea"></div>
       <div class="actions">
         <select id="filterPriority" onchange="render()">
           <option value="todas">Todas las prioridades</option>
-          <option value="alta">🔥 Lo quiero mucho</option>
-          <option value="media">✨ Me encantaría</option>
-          <option value="baja">💡 Idea casual</option>
+          <option value="alta">💖 Lo quiero mucho</option>
+          <option value="media">💜 Me encantaría</option>
+          <option value="baja">✨ Idea casual</option>
         </select>
-       <button class="btn btn-primary" onclick="openModal()">+ Agregar deseo</button>
+        <button class="btn btn-roulette" id="rouletteBtn" onclick="pickRandomGift()" style="display:none;">
+          🎲 Sorprenderme
+        </button>
+        <button class="btn btn-primary" onclick="openModal()">+ Agregar deseo</button>
       </div>
     </div>
 
+    <!-- Grid de tarjetas -->
     <div class="grid" id="wishlistGrid"></div>
   </main>
 
-  <!-- Modal para agregar regalo -->
+  <!-- Modal: Nuevo Deseo -->
   <div class="modal-backdrop" id="modalBackdrop">
     <div class="modal">
-      <h2>Nuevo deseo 🎁</h2>
+      <h2>Agregar nuevo deseo 💜</h2>
       <form id="wishForm" onsubmit="addWish(event)">
         <div class="form-row">
           <div class="form-group">
@@ -392,16 +667,21 @@
           <div class="form-group">
             <label>Prioridad</label>
             <select id="wPriority">
-              <option value="alta">🔥 Lo quiero mucho</option>
-              <option value="media" selected>✨ Me encantaría</option>
-              <option value="baja">💡 Idea casual</option>
+              <option value="alta">💖 Lo quiero mucho</option>
+              <option value="media" selected>💜 Me encantaría</option>
+              <option value="baja">✨ Idea casual</option>
             </select>
           </div>
         </div>
 
         <div class="form-group">
-          <label>Nombre del regalo *</label>
-          <input type="text" id="wTitle" placeholder="Ej. Perfume, tenis blancos, libro..." required />
+          <label>Elige un personaje BT21 para esta tarjeta</label>
+          <div class="bt21-selector" id="bt21Selector"></div>
+        </div>
+
+        <div class="form-group">
+          <label>¿Qué regalo te gustaría? *</label>
+          <input type="text" id="wTitle" placeholder="Ej. Perfume, álbum de BTS, tenis, libro..." required />
         </div>
 
         <div class="form-row">
@@ -410,39 +690,73 @@
             <input type="text" id="wPrice" placeholder="Ej. Q350" />
           </div>
           <div class="form-group">
-            <label>Enlace de referencia (opcional)</label>
+            <label>Enlace de tienda (opcional)</label>
             <input type="url" id="wLink" placeholder="https://..." />
           </div>
         </div>
 
         <div class="form-group">
           <label>URL de imagen (opcional)</label>
-          <input type="url" id="wImage" placeholder="https://... (clic derecho > copiar dirección de imagen)" />
+          <input type="url" id="wImage" placeholder="https://..." />
         </div>
 
         <div class="form-group">
-          <label>Notas (talla, color, modelo, tienda)</label>
-          <textarea id="wNotes" rows="2" placeholder="Ej. Talla M, color beige o negro..."></textarea>
+          <label>Detalles (talla, color, modelo, tienda)</label>
+          <textarea id="wNotes" rows="2" placeholder="Ej. Talla M, color morado o blanco..."></textarea>
         </div>
 
         <div class="modal-actions">
           <button type="button" class="btn" onclick="closeModal()">Cancelar</button>
-          <button type="submit" class="btn-primary">Guardar en lista</button>
+          <button type="submit" class="btn btn-primary">Guardar deseo</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Firebase SDK (compat para usar en un solo archivo estático) -->
+  <!-- Modal: Configurar Próxima Fecha Especial -->
+  <div class="modal-backdrop" id="eventModalBackdrop">
+    <div class="modal">
+      <h2>Próxima fecha especial 📅</h2>
+      <form onsubmit="saveSpecialEvent(event)">
+        <div class="form-group">
+          <label>Nombre de la ocasión</label>
+          <input type="text" id="evTitle" placeholder="Ej. Nuestro Aniversario, Cumpleaños..." required />
+        </div>
+        <div class="form-group">
+          <label>Fecha</label>
+          <input type="date" id="evDate" required />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeEventModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar fecha</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Resultado de Ruleta -->
+  <div class="modal-backdrop" id="rouletteBackdrop">
+    <div class="modal" style="text-align:center;">
+      <div id="rouletteIcon" style="margin-bottom:0.5rem;"></div>
+      <h2>¡El destino eligió este regalo! 🎲</h2>
+      <div id="rouletteResult" style="margin: 1rem 0;"></div>
+      <div class="modal-actions" style="justify-content:center;">
+        <button type="button" class="btn" onclick="closeRoulette()">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="rouletteReserveBtn">🤫 Apartarlo ahora</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
   <script>
     // =========================================================================
-    // OPCIONAL: Pega aquí tu configuración de Firebase Firestore para sincronizar
-    // en tiempo real entre el teléfono de José y el de Elizabeth.
-    // Si lo dejas vacío, funcionará automáticamente en localStorage.
+    // CONFIGURACIÓN DE ACCESO Y FIREBASE
     // =========================================================================
+    const ACCESS_PIN = "3010"; // Cambia este PIN de 4 dígitos si deseas otro
+
     const firebaseConfig = {
       apiKey: "AIzaSyCxGwx_pWRCwAhOA-DMVaH2dTB-tRPMMx4",
       authDomain: "wishlist-69a2a.firebaseapp.com",
@@ -452,70 +766,159 @@
       appId: "1:780577972330:web:f6bd8fb4227cb63d576a13"
     };
 
-    let currentOwner = 'ella';
-    let items = [];
-    let db = null;
-    const isFirebaseConfigured = Boolean(firebaseConfig.apiKey && firebaseConfig.projectId);
-
-    // Ejemplos iniciales si está vacío
-    const defaultSamples = [
-      {
-        id: 'sample-1',
-        owner: 'ella',
-        title: 'Ramo de flores amarillas + chocolates',
-        priority: 'alta',
-        price: 'Q180',
-        link: '',
-        image: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=700&q=80',
-        notes: 'Siempre es un detalle favorito ✨',
-        reserved: false
+    // =========================================================================
+    // AVATARES SVG DE BT21 (Cooky, Tata, Koya, Chimmy, RJ, Shooky, Mang)
+    // =========================================================================
+    const BT21 = {
+      cooky: {
+        name: "Cooky",
+        svg: `<svg viewBox="0 0 64 64"><rect x="18" y="4" width="10" height="24" rx="5" fill="#f472b6"/><path d="M36 4c3 0 5 2 5 5v11l5 5-4 4-6-6V9c0-3 2-5 5-5z" fill="#f472b6"/><circle cx="32" cy="38" r="20" fill="#f9a8d4"/><circle cx="25" cy="36" r="2.5" fill="#1f2937"/><circle cx="39" cy="36" r="2.5" fill="#1f2937"/><path d="M22 31l6 2M42 31l-6 2" stroke="#1f2937" stroke-width="2" stroke-linecap="round"/><ellipse cx="32" cy="41" rx="3" ry="2" fill="#ec4899"/><path d="M28 45q4 4 8 0" fill="none" stroke="#1f2937" stroke-width="2" stroke-linecap="round"/></svg>`
       },
-      {
-        id: 'sample-2',
-        owner: 'el',
-        title: 'Audífonos o accesorio para escritorio',
-        priority: 'media',
-        price: 'Q450',
-        link: '',
-        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=80',
-        notes: 'Color negro o minimalista.',
-        reserved: false
+      tata: {
+        name: "Tata",
+        svg: `<svg viewBox="0 0 64 64"><path d="M32 54C16 42 8 32 8 21a13 13 0 0 1 24-7 13 13 0 0 1 24 7c0 11-8 21-24 33z" fill="#ef4444"/><circle cx="24" cy="25" r="2.5" fill="#111827"/><circle cx="40" cy="25" r="2.5" fill="#111827"/><path d="M21 20l6 2M43 20l-6 2" stroke="#111827" stroke-width="2" stroke-linecap="round"/><ellipse cx="32" cy="33" rx="6" ry="3.5" fill="#facc15"/></svg>`
+      },
+      koya: {
+        name: "Koya",
+        svg: `<svg viewBox="0 0 64 64"><circle cx="14" cy="24" r="10" fill="#60a5fa"/><circle cx="14" cy="24" r="5" fill="#dbeafe"/><circle cx="50" cy="24" r="10" fill="#60a5fa"/><circle cx="50" cy="24" r="5" fill="#dbeafe"/><ellipse cx="32" cy="36" rx="21" ry="18" fill="#60a5fa"/><ellipse cx="32" cy="37" rx="4.5" ry="6" fill="#7c3aed"/><path d="M21 33h6M37 33h6" stroke="#1e293b" stroke-width="2.3" stroke-linecap="round"/><path d="M28 46q4 3 8 0" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/></svg>`
+      },
+      chimmy: {
+        name: "Chimmy",
+        svg: `<svg viewBox="0 0 64 64"><ellipse cx="13" cy="38" rx="7" ry="13" fill="#1f2937"/><ellipse cx="51" cy="38" rx="7" ry="13" fill="#1f2937"/><circle cx="32" cy="34" r="21" fill="#facc15"/><circle cx="32" cy="36" r="16" fill="#ffffff"/><circle cx="26" cy="32" r="2.5" fill="#1f2937"/><circle cx="38" cy="32" r="2.5" fill="#1f2937"/><ellipse cx="32" cy="37" rx="3.2" ry="2.2" fill="#1f2937"/><path d="M29 42q3 5 6 0" fill="#fb7185" stroke="#1f2937" stroke-width="1.5"/></svg>`
+      },
+      rj: {
+        name: "RJ",
+        svg: `<svg viewBox="0 0 64 64"><ellipse cx="22" cy="14" rx="4.5" ry="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/><ellipse cx="42" cy="14" rx="4.5" ry="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/><circle cx="32" cy="35" r="20" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/><circle cx="25" cy="32" r="2.3" fill="#1f2937"/><circle cx="39" cy="32" r="2.3" fill="#1f2937"/><path d="M29 38l3 2 3-2" fill="none" stroke="#1f2937" stroke-width="2" stroke-linecap="round"/><path d="M17 48q15 6 30 0" fill="none" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round"/></svg>`
+      },
+      shooky: {
+        name: "Shooky",
+        svg: `<svg viewBox="0 0 64 64"><circle cx="32" cy="34" r="20" fill="#92400e"/><circle cx="21" cy="24" r="2.5" fill="#78350f"/><circle cx="44" cy="41" r="3" fill="#78350f"/><circle cx="25" cy="32" r="2.5" fill="#111827"/><circle cx="39" cy="32" r="2.5" fill="#111827"/><path d="M21 27l7 2M43 27l-7 2" stroke="#111827" stroke-width="2.2" stroke-linecap="round"/><path d="M25 40q7 6 14 0Z" fill="#ffffff" stroke="#111827" stroke-width="1.5"/></svg>`
+      },
+      mang: {
+        name: "Mang",
+        svg: `<svg viewBox="0 0 64 64"><ellipse cx="32" cy="34" rx="19" ry="21" fill="#8b5cf6"/><path d="M18 16l6-7 4 7M46 16l-6-7-4 7" fill="#6d28d9"/><ellipse cx="32" cy="40" rx="11" ry="9" fill="#38bdf8"/><circle cx="25" cy="28" r="2.3" fill="#111827"/><circle cx="39" cy="28" r="2.3" fill="#111827"/><path d="M32 37c-2-2-5-1-5 2 0 2 5 5 5 5s5-3 5-5c0-3-3-4-5-2z" fill="#ec4899"/></svg>`
       }
-    ];
+    };
 
-    function initApp() {
-      if (isFirebaseConfigured) {
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.firestore();
-        document.getElementById('syncStatus').textContent = '🟢 Sincronizado en la nube en tiempo real';
+    // Estado global
+    let loggedUser = sessionStorage.getItem('wishlist_user') || null; // 'ella' | 'el'
+    let pendingIdentity = 'ella';
+    let currentTab = 'ella'; // 'ella' | 'el' | 'recuerdos'
+    let selectedCharacter = 'cooky';
+    let items = [];
+    let specialEvent = null;
 
-        db.collection('wishlist').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
-          items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          render();
-        });
-      } else {
-        const saved = localStorage.getItem('couple_wishlist_v1');
-        items = saved ? JSON.parse(saved) : defaultSamples;
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Inicializar elementos visuales de BT21
+    function initVisuals() {
+      document.getElementById('paradeContainer').innerHTML = Object.values(BT21).map(c => c.svg).join('');
+      document.getElementById('iconElla').innerHTML = `<div style="width:36px;height:36px;">${BT21.cooky.svg}</div>`;
+      document.getElementById('iconEl').innerHTML = `<div style="width:36px;height:36px;">${BT21.tata.svg}</div>`;
+
+      const selector = document.getElementById('bt21Selector');
+      selector.innerHTML = Object.entries(BT21).map(([key, val]) => `
+        <div class="bt21-option ${key === selectedCharacter ? 'selected' : ''}" data-char="${key}" onclick="chooseCharacter('${key}')">
+          ${val.svg}
+          <span>${val.name}</span>
+        </div>
+      `).join('');
+
+      if (loggedUser) {
+        document.getElementById('lockScreen').classList.add('hidden');
+        updateUserBadge();
+      }
+    }
+
+    function selectIdentity(who) {
+      pendingIdentity = who;
+      document.getElementById('whoElla').classList.toggle('selected', who === 'ella');
+      document.getElementById('whoEl').classList.toggle('selected', who === 'el');
+    }
+
+    function unlockApp() {
+      const pin = document.getElementById('pinInput').value.trim();
+      if (pin !== ACCESS_PIN) {
+        document.getElementById('pinError').textContent = 'PIN incorrecto, intenta de nuevo 💜';
+        return;
+      }
+      loggedUser = pendingIdentity;
+      sessionStorage.setItem('wishlist_user', loggedUser);
+      document.getElementById('lockScreen').classList.add('hidden');
+      document.getElementById('pinInput').value = '';
+      document.getElementById('pinError').textContent = '';
+      // Por defecto abrir la lista de la pareja para inspirarse
+      switchTab(loggedUser === 'ella' ? 'el' : 'ella');
+      updateUserBadge();
+    }
+
+    function switchIdentityPrompt() {
+      document.getElementById('lockScreen').classList.remove('hidden');
+    }
+
+    function updateUserBadge() {
+      const badge = document.getElementById('currentUserBadge');
+      badge.textContent = loggedUser === 'ella' ? '🐰 Hola, Elizabeth' : '❤️ Hola, José';
+    }
+
+    function chooseCharacter(key) {
+      selectedCharacter = key;
+      document.querySelectorAll('.bt21-option').forEach(el => {
+        el.classList.toggle('selected', el.dataset.char === key);
+      });
+    }
+
+    // Escucha en tiempo real de Firestore
+    function startSync() {
+      db.collection('wishlist').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+        items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        document.getElementById('syncStatus').textContent = '💜 Sincronizado en la nube en tiempo real';
         render();
+      }, err => {
+        document.getElementById('syncStatus').textContent = '⚠️ Error de conexión con Firestore';
+        console.error(err);
+      });
+
+      db.collection('settings').doc('specialEvent').onSnapshot(doc => {
+        if (doc.exists) {
+          specialEvent = doc.data();
+          updateCountdownUI();
+        }
+      });
+    }
+
+    function updateCountdownUI() {
+      const el = document.getElementById('countdownDisplay');
+      if (!specialEvent || !specialEvent.date) {
+        el.textContent = '📅 Configurar próxima fecha especial';
+        return;
+      }
+      const target = new Date(specialEvent.date + 'T00:00:00');
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const diffDays = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+
+      if (diffDays > 0) {
+        el.textContent = `⏳ Faltan ${diffDays} días para: ${specialEvent.title}`;
+      } else if (diffDays === 0) {
+        el.textContent = `🎉 ¡Hoy es ${specialEvent.title}!`;
+      } else {
+        el.textContent = `📅 ${specialEvent.title} (clic para actualizar)`;
       }
     }
 
-    function saveLocal() {
-      if (!isFirebaseConfigured) {
-        localStorage.setItem('couple_wishlist_v1', JSON.stringify(items));
-      }
-    }
-
-    function switchOwner(owner) {
-      currentOwner = owner;
+    function switchTab(tab) {
+      currentTab = tab;
       document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.owner === owner);
+        btn.classList.toggle('active', btn.dataset.tab === tab);
       });
       render();
     }
 
     function openModal() {
-      document.getElementById('wOwner').value = currentOwner;
+      document.getElementById('wOwner').value = currentTab === 'recuerdos' ? (loggedUser || 'ella') : currentTab;
+      chooseCharacter(currentTab === 'el' ? 'tata' : 'cooky');
       document.getElementById('modalBackdrop').classList.add('open');
     }
 
@@ -524,105 +927,220 @@
       document.getElementById('wishForm').reset();
     }
 
+    function openEventModal() {
+      if (specialEvent) {
+        document.getElementById('evTitle').value = specialEvent.title || '';
+        document.getElementById('evDate').value = specialEvent.date || '';
+      }
+      document.getElementById('eventModalBackdrop').classList.add('open');
+    }
+
+    function closeEventModal() {
+      document.getElementById('eventModalBackdrop').classList.remove('open');
+    }
+
+    async function saveSpecialEvent(e) {
+      e.preventDefault();
+      await db.collection('settings').doc('specialEvent').set({
+        title: document.getElementById('evTitle').value.trim(),
+        date: document.getElementById('evDate').value
+      });
+      closeEventModal();
+    }
+
     async function addWish(e) {
       e.preventDefault();
-      const newItem = {
-        owner: document.getElementById('wOwner').value,
+      const owner = document.getElementById('wOwner').value;
+      await db.collection('wishlist').add({
+        owner,
         priority: document.getElementById('wPriority').value,
+        character: selectedCharacter,
         title: document.getElementById('wTitle').value.trim(),
         price: document.getElementById('wPrice').value.trim(),
         link: document.getElementById('wLink').value.trim(),
         image: document.getElementById('wImage').value.trim(),
         notes: document.getElementById('wNotes').value.trim(),
         reserved: false,
+        fulfilled: false,
+        reactions: {},
         createdAt: Date.now()
-      };
-
-      if (isFirebaseConfigured && db) {
-        await db.collection('wishlist').add(newItem);
-      } else {
-        newItem.id = 'item-' + Date.now();
-        items.unshift(newItem);
-        saveLocal();
-        render();
-      }
-      switchOwner(newItem.owner);
+      });
+      switchTab(owner);
       closeModal();
     }
 
     async function toggleReserve(id) {
       const target = items.find(i => i.id === id);
       if (!target) return;
+      await db.collection('wishlist').doc(id).update({ reserved: !target.reserved });
+    }
 
-      if (isFirebaseConfigured && db) {
-        await db.collection('wishlist').doc(id).update({ reserved: !target.reserved });
-      } else {
-        target.reserved = !target.reserved;
-        saveLocal();
-        render();
-      }
+    async function markFulfilled(id) {
+      if (!confirm('¿Marcar este regalo como ya entregado y moverlo a Cumplidos? 🎁')) return;
+      await db.collection('wishlist').doc(id).update({
+        fulfilled: true,
+        fulfilledAt: new Date().toLocaleDateString('es-GT')
+      });
+    }
+
+    async function toggleReaction(id, emojiKey) {
+      const target = items.find(i => i.id === id);
+      if (!target) return;
+      const reactions = { ...(target.reactions || {}) };
+      reactions[emojiKey] = !reactions[emojiKey];
+      await db.collection('wishlist').doc(id).update({ reactions });
     }
 
     async function deleteWish(id) {
-      if (!confirm('¿Seguro que deseas eliminar este deseo de la lista?')) return;
+      if (!confirm('¿Seguro que deseas eliminar este deseo?')) return;
+      await db.collection('wishlist').doc(id).delete();
+    }
 
-      if (isFirebaseConfigured && db) {
-        await db.collection('wishlist').doc(id).delete();
-      } else {
-        items = items.filter(i => i.id !== id);
-        saveLocal();
-        render();
+    // Ruleta para elegir regalo al azar de la pareja
+    function pickRandomGift() {
+      const available = items.filter(i => i.owner === currentTab && !i.fulfilled && !i.reserved);
+      if (available.length === 0) {
+        alert('¡Todos los deseos de esta lista ya están apartados o aún no hay deseos disponibles! 💜');
+        return;
       }
+      const chosen = available[Math.floor(Math.random() * available.length)];
+      const charObj = BT21[chosen.character] || BT21.cooky;
+
+      document.getElementById('rouletteIcon').innerHTML = `<div style="width:64px;height:64px;margin:0 auto;">${charObj.svg}</div>`;
+      document.getElementById('rouletteResult').innerHTML = `
+        <h3 style="font-size:1.25rem; color:var(--primary); margin-bottom:0.35rem;">${chosen.title}</h3>
+        <p style="color:var(--muted); font-size:0.9rem;">${chosen.notes || 'Un detalle súper especial ✨'}</p>
+        ${chosen.price ? `<p style="font-weight:800; margin-top:0.5rem;">Precio aprox: ${chosen.price}</p>` : ''}
+      `;
+      document.getElementById('rouletteReserveBtn').onclick = async () => {
+        await toggleReserve(chosen.id);
+        closeRoulette();
+      };
+      document.getElementById('rouletteBackdrop').classList.add('open');
+    }
+
+    function closeRoulette() {
+      document.getElementById('rouletteBackdrop').classList.remove('open');
     }
 
     function priorityLabel(p) {
-      if (p === 'alta') return { text: '🔥 Lo quiero mucho', cls: 'prio-alta' };
-      if (p === 'baja') return { text: '💡 Idea casual', cls: 'prio-baja' };
-      return { text: '✨ Me encantaría', cls: 'prio-media' };
+      if (p === 'alta') return { text: '💖 Lo quiero mucho', cls: 'prio-alta' };
+      if (p === 'baja') return { text: '✨ Idea casual', cls: 'prio-baja' };
+      return { text: '💜 Me encantaría', cls: 'prio-media' };
     }
 
     function render() {
       const grid = document.getElementById('wishlistGrid');
       const filterPrio = document.getElementById('filterPriority').value;
+      const banner = document.getElementById('surpriseBanner');
+      const statsArea = document.getElementById('statsArea');
+      const rouletteBtn = document.getElementById('rouletteBtn');
 
-      const ownerItems = items.filter(i => i.owner === currentOwner);
+      // Pestaña de Regalos Cumplidos
+      if (currentTab === 'recuerdos') {
+        banner.innerHTML = `<span>🎁 <strong>Historial de Recuerdos:</strong> Regalos que ya se hicieron realidad entre ustedes.</span>`;
+        rouletteBtn.style.display = 'none';
+        const fulfilledList = items.filter(i => i.fulfilled);
+        statsArea.innerHTML = `<span>Regalos cumplidos: <strong>${fulfilledList.length}</strong></span>`;
+
+        if (fulfilledList.length === 0) {
+          grid.innerHTML = `<div class="empty-state"><h3>Aún no hay regalos en el historial 🎁</h3><p>Cuando entreguen un regalo, presiónenle <strong>"🎉 Entregado"</strong> para guardarlo aquí.</p></div>`;
+          return;
+        }
+
+        grid.innerHTML = fulfilledList.map(item => {
+          const charObj = BT21[item.character] || BT21.cooky;
+          const whoName = item.owner === 'ella' ? 'Para Elizabeth' : 'Para José';
+          return `
+            <article class="card fulfilled-card">
+              <div class="card-top-media">
+                ${item.image ? `<img class="card-img" src="${item.image}" alt="${item.title}">` : `<div style="width:72px;height:72px;">${charObj.svg}</div>`}
+                <span class="bt21-badge">${charObj.svg} ${whoName}</span>
+              </div>
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="pill prio-media">🎉 Cumplido ${item.fulfilledAt || ''}</span>
+                  ${item.price ? `<span class="price">${item.price}</span>` : ''}
+                </div>
+                <h3 class="card-title">${item.title}</h3>
+                <p class="card-notes">${item.notes || ''}</p>
+                <div class="card-footer">
+                  <button class="btn-icon" title="Eliminar" onclick="deleteWish('${item.id}')">🗑</button>
+                </div>
+              </div>
+            </article>
+          `;
+        }).join('');
+        return;
+      }
+
+      // Pestañas de Elizabeth o José
+      const isViewingOwnList = (loggedUser === currentTab);
+      const ownerItems = items.filter(i => i.owner === currentTab && !i.fulfilled);
       const filtered = ownerItems.filter(i => filterPrio === 'todas' || i.priority === filterPrio);
 
-      document.getElementById('statTotal').textContent = ownerItems.length;
-      document.getElementById('statReserved').textContent = ownerItems.filter(i => i.reserved).length;
+      if (isViewingOwnList) {
+        banner.innerHTML = `<span>🤫 <strong>Modo Sorpresa Activo:</strong> Estás viendo tu propia lista. Ocultamos qué regalos ya fueron apartados para no arruinarte la sorpresa.</span>`;
+        rouletteBtn.style.display = 'none';
+        statsArea.innerHTML = `<span>Tus deseos activos: <strong>${ownerItems.length}</strong></span>`;
+      } else {
+        const partnerName = currentTab === 'ella' ? 'Elizabeth' : 'José';
+        const reservedCount = ownerItems.filter(i => i.reserved).length;
+        banner.innerHTML = `<span>✨ Estás viendo la lista de <strong>${partnerName}</strong>. Puedes apartar regalos en secreto sin que lo vea.</span>`;
+        rouletteBtn.style.display = 'inline-flex';
+        statsArea.innerHTML = `
+          <span>Deseos: <strong>${ownerItems.length}</strong></span>
+          <span>Apartados por ti: <strong>${reservedCount}</strong></span>
+        `;
+      }
 
       if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="empty-state">
-            <h3>Aún no hay deseos aquí ✨</h3>
-            <p style="margin-top: 0.4rem;">Haz clic en <strong>"+ Agregar deseo"</strong> para añadir el primero.</p>
-          </div>`;
+        grid.innerHTML = `<div class="empty-state"><h3>Aún no hay deseos aquí 💜</h3><p style="margin-top:0.4rem;">Haz clic en <strong>"+ Agregar deseo"</strong> para añadir el primero.</p></div>`;
         return;
       }
 
       grid.innerHTML = filtered.map(item => {
         const prio = priorityLabel(item.priority);
-        const imgBlock = item.image
-          ? `<img class="card-img" src="${item.image}" alt="${item.title}" onerror="this.outerHTML='<div class=\\'card-img\\'>🎁</div>'">`
-          : `<div class="card-img">🎁</div>`;
+        const charObj = BT21[item.character] || BT21.cooky;
+        const showReservedState = !isViewingOwnList && item.reserved;
+        const r = item.reactions || {};
 
         return `
-          <article class="card ${item.reserved ? 'reserved' : ''}">
-            ${imgBlock}
+          <article class="card ${showReservedState ? 'reserved-visible' : ''}">
+            <div class="card-top-media">
+              ${item.image
+                ? `<img class="card-img" src="${item.image}" alt="${item.title}" onerror="this.outerHTML='<div style=\\'width:74px;height:74px;\\'>${charObj.svg}</div>'">`
+                : `<div style="width:74px;height:74px;">${charObj.svg}</div>`}
+              <span class="bt21-badge">${charObj.svg} ${charObj.name}</span>
+            </div>
+
             <div class="card-body">
               <div class="card-meta">
                 <span class="pill ${prio.cls}">${prio.text}</span>
                 ${item.price ? `<span class="price">${item.price}</span>` : ''}
               </div>
+
               <h3 class="card-title">${item.title}</h3>
               <p class="card-notes">${item.notes || 'Sin notas adicionales.'}</p>
 
+              <!-- Reacciones rápidas -->
+              <div class="reactions-row">
+                <button type="button" class="react-chip ${r.love ? 'active' : ''}" onclick="toggleReaction('${item.id}', 'love')">❤️ Me encanta</button>
+                <button type="button" class="react-chip ${r.hint ? 'active' : ''}" onclick="toggleReaction('${item.id}', 'hint')">👀 Buena pista</button>
+                <button type="button" class="react-chip ${r.soon ? 'active' : ''}" onclick="toggleReaction('${item.id}', 'soon')">✨ Pronto</button>
+              </div>
+
               <div class="card-footer">
-                ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener" class="btn-sm btn-link">Ver tienda ↗</a>` : ''}
-                <button class="btn-sm btn-reserve ${item.reserved ? 'active' : ''}" onclick="toggleReserve('${item.id}')">
-                  ${item.reserved ? '✓ Regalo apartado' : 'Apartar regalo'}
-                </button>
-                <button class="btn-delete" title="Eliminar" onclick="deleteWish('${item.id}')">🗑</button>
+                ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener" class="btn-sm btn-link">Tienda ↗</a>` : ''}
+
+                ${!isViewingOwnList ? `
+                  <button class="btn-sm btn-reserve ${item.reserved ? 'active' : ''}" onclick="toggleReserve('${item.id}')">
+                    ${item.reserved ? '✓ Apartado en secreto' : '🤫 Apartar'}
+                  </button>
+                ` : ''}
+
+                <button class="btn-sm btn-fulfill" title="Marcar como ya regalado" onclick="markFulfilled('${item.id}')">🎉 Entregado</button>
+                <button class="btn-icon" title="Eliminar" onclick="deleteWish('${item.id}')">🗑</button>
               </div>
             </div>
           </article>
@@ -630,7 +1148,8 @@
       }).join('');
     }
 
-    initApp();
+    initVisuals();
+    startSync();
   </script>
 </body>
 </html>
