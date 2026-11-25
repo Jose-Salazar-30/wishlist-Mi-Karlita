@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuestra Wishlist ✨ | José & Elizabeth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf8f6;
+      --surface: #ffffff;
+      --text: #1e1b18;
+      --muted: #6e655f;
+      --border: #ebe4de;
+      --primary: #c96a5b;
+      --primary-hover: #b35849;
+      --accent-her: #d9778b;
+      --accent-him: #4a7c8c;
+      --success: #2e8b6e;
+      --warning: #d9822b;
+      --shadow: 0 10px 30px -10px rgba(30, 27, 24, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 4rem;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #fff6f3 0%, #f4f8fa 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 1.25rem 2rem;
+      text-align: center;
+    }
+    .badge-top {
+      display: inline-block;
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 1.5rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Switcher de Usuario */
+    .tabs-wrapper {
+      display: inline-flex;
+      background: #eee7e1;
+      padding: 0.35rem;
+      border-radius: 999px;
+      gap: 0.35rem;
+    }
+    .tab-btn {
+      border: none;
+      background: transparent;
+      padding: 0.65rem 1.5rem;
+      border-radius: 999px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .tab-btn.active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    /* Contenedor Principal */
+    .container {
+      max-width: 1020px;
+      margin: 2rem auto 0;
+      padding: 0 1.25rem;
+    }
+
+    /* Barra de herramientas y estadísticas */
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      background: var(--surface);
+      padding: 1.1rem 1.4rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .stats {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+    }
+    .stats span strong { color: var(--text); font-size: 1.05rem; }
+    .stats span { color: var(--muted); }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    select, .btn {
+      font-family: inherit;
+      font-size: 0.9rem;
+      border-radius: 12px;
+      padding: 0.65rem 1.1rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+    /* Grid de Regalos */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.35rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease;
+      position: relative;
+    }
+    .card:hover { transform: translateY(-4px); }
+    .card.reserved {
+      border-color: #b7dfd2;
+      background: #fafdfb;
+    }
+
+    .card-img {
+      width: 100%;
+      height: 185px;
+      object-fit: cover;
+      background: #f2ece7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 2.5rem;
+    }
+    .card-body {
+      padding: 1.25rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      gap: 0.5rem;
+    }
+    .pill {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+    }
+    .prio-alta { background: #fde8e8; color: #c53030; }
+    .prio-media { background: #fef3c7; color: #b45309; }
+    .prio-baja { background: #e0f2fe; color: #0369a1; }
+
+    .price {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .card-title {
+      font-size: 1.12rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      line-height: 1.3;
+    }
+    .card-notes {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.45;
+      margin-bottom: 1.1rem;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      gap: 0.5rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--border);
+      align-items: center;
+    }
+    .btn-sm {
+      padding: 0.5rem 0.8rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 10px;
+      text-decoration: none;
+      text-align: center;
+    }
+    .btn-link {
+      background: #f5f0ec;
+      color: var(--text);
+      border: none;
+    }
+    .btn-link:hover { background: #eae2db; }
+    .btn-reserve {
+      flex: 1;
+      background: #eef7f4;
+      color: var(--success);
+      border: 1px solid #cce8df;
+    }
+    .btn-reserve.active {
+      background: var(--success);
+      color: #fff;
+      border-color: var(--success);
+    }
+    .btn-delete {
+      background: transparent;
+      border: none;
+      color: #a89f99;
+      padding: 0.45rem;
+      font-size: 1rem;
+    }
+    .btn-delete:hover { color: #c53030; }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 1.5rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px dashed var(--border);
+      color: var(--muted);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 17, 15, 0.55);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--surface);
+      width: 100%;
+      max-width: 480px;
+      border-radius: 22px;
+      padding: 1.75rem;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+      animation: pop 0.2s ease;
+    }
+    @keyframes pop {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal h2 {
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 1.1rem;
+      font-size: 1.5rem;
+    }
+    .form-group { margin-bottom: 0.95rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.83rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      color: var(--muted);
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-family: inherit;
+      font-size: 0.92rem;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.65rem;
+      margin-top: 1.35rem;
+    }
+    .sync-status {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <span class="badge-top">✨ NUESTRA LISTA COMPARTIDA</span>
+    <h1>José & Elizabeth</h1>
+    <p>Un espacio para guardar ideas de regalos, detalles especiales y cosas que nos harían ilusión recibir.</p>
+
+    <div class="tabs-wrapper">
+      <button class="tab-btn active" data-owner="ella" onclick="switchOwner('ella')">🌷 Lista de Elizabeth</button>
+      <button class="tab-btn" data-owner="el" onclick="switchOwner('el')">🚀 Lista de José</button>
+    </div>
+    <div class="sync-status" id="syncStatus">Modo local activo (listo para conectar Firebase)</div>
+  </header>
+
+  <main class="container">
+    <div class="toolbar">
+      <div class="stats">
+        <span>Deseos: <strong id="statTotal">0</strong></span>
+        <span>Apartados: <strong id="statReserved">0</strong></span>
+      </div>
+      <div class="actions">
+        <select id="filterPriority" onchange="render()">
+          <option value="todas">Todas las prioridades</option>
+          <option value="alta">🔥 Lo quiero mucho</option>
+          <option value="media">✨ Me encantaría</option>
+          <option value="baja">💡 Idea casual</option>
+        </select>
+        <button class="btn-primary" onclick="openModal()">+ Agregar deseo</button>
+      </div>
+    </div>
+
+    <div class="grid" id="wishlistGrid"></div>
+  </main>
+
+  <!-- Modal para agregar regalo -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <h2>Nuevo deseo 🎁</h2>
+      <form id="wishForm" onsubmit="addWish(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>¿Para quién es?</label>
+            <select id="wOwner" required>
+              <option value="ella">Elizabeth</option>
+              <option value="el">José</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Prioridad</label>
+            <select id="wPriority">
+              <option value="alta">🔥 Lo quiero mucho</option>
+              <option value="media" selected>✨ Me encantaría</option>
+              <option value="baja">💡 Idea casual</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Nombre del regalo *</label>
+          <input type="text" id="wTitle" placeholder="Ej. Perfume, tenis blancos, libro..." required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Precio aprox. (Q)</label>
+            <input type="text" id="wPrice" placeholder="Ej. Q350" />
+          </div>
+          <div class="form-group">
+            <label>Enlace de referencia (opcional)</label>
+            <input type="url" id="wLink" placeholder="https://..." />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>URL de imagen (opcional)</label>
+          <input type="url" id="wImage" placeholder="https://... (clic derecho > copiar dirección de imagen)" />
+        </div>
+
+        <div class="form-group">
+          <label>Notas (talla, color, modelo, tienda)</label>
+          <textarea id="wNotes" rows="2" placeholder="Ej. Talla M, color beige o negro..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeModal()">Cancelar</button>
+          <button type="submit" class="btn-primary">Guardar en lista</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Firebase SDK (compat para usar en un solo archivo estático) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <script>
+    // =========================================================================
+    // OPCIONAL: Pega aquí tu configuración de Firebase Firestore para sincronizar
+    // en tiempo real entre el teléfono de José y el de Elizabeth.
+    // Si lo dejas vacío, funcionará automáticamente en localStorage.
+    // =========================================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyCxGwx_pWRCwAhOA-DMVaH2dTB-tRPMMx4",
+      authDomain: "wishlist-69a2a.firebaseapp.com",
+      projectId: "wishlist-69a2a",
+      storageBucket: "wishlist-69a2a.firebasestorage.app",
+      messagingSenderId: "780577972330",
+      appId: "1:780577972330:web:f6bd8fb4227cb63d576a13"
+    };
+
+    let currentOwner = 'ella';
+    let items = [];
+    let db = null;
+    const isFirebaseConfigured = Boolean(firebaseConfig.apiKey && firebaseConfig.projectId);
+
+    // Ejemplos iniciales si está vacío
+    const defaultSamples = [
+      {
+        id: 'sample-1',
+        owner: 'ella',
+        title: 'Ramo de flores amarillas + chocolates',
+        priority: 'alta',
+        price: 'Q180',
+        link: '',
+        image: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=700&q=80',
+        notes: 'Siempre es un detalle favorito ✨',
+        reserved: false
+      },
+      {
+        id: 'sample-2',
+        owner: 'el',
+        title: 'Audífonos o accesorio para escritorio',
+        priority: 'media',
+        price: 'Q450',
+        link: '',
+        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=80',
+        notes: 'Color negro o minimalista.',
+        reserved: false
+      }
+    ];
+
+    function initApp() {
+      if (isFirebaseConfigured) {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+        document.getElementById('syncStatus').textContent = '🟢 Sincronizado en la nube en tiempo real';
+
+        db.collection('wishlist').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+          items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          render();
+        });
+      } else {
+        const saved = localStorage.getItem('couple_wishlist_v1');
+        items = saved ? JSON.parse(saved) : defaultSamples;
+        render();
+      }
+    }
+
+    function saveLocal() {
+      if (!isFirebaseConfigured) {
+        localStorage.setItem('couple_wishlist_v1', JSON.stringify(items));
+      }
+    }
+
+    function switchOwner(owner) {
+      currentOwner = owner;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.owner === owner);
+      });
+      render();
+    }
+
+    function openModal() {
+      document.getElementById('wOwner').value = currentOwner;
+      document.getElementById('modalBackdrop').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('modalBackdrop').classList.remove('open');
+      document.getElementById('wishForm').reset();
+    }
+
+    async function addWish(e) {
+      e.preventDefault();
+      const newItem = {
+        owner: document.getElementById('wOwner').value,
+        priority: document.getElementById('wPriority').value,
+        title: document.getElementById('wTitle').value.trim(),
+        price: document.getElementById('wPrice').value.trim(),
+        link: document.getElementById('wLink').value.trim(),
+        image: document.getElementById('wImage').value.trim(),
+        notes: document.getElementById('wNotes').value.trim(),
+        reserved: false,
+        createdAt: Date.now()
+      };
+
+      if (isFirebaseConfigured && db) {
+        await db.collection('wishlist').add(newItem);
+      } else {
+        newItem.id = 'item-' + Date.now();
+        items.unshift(newItem);
+        saveLocal();
+        render();
+      }
+      switchOwner(newItem.owner);
+      closeModal();
+    }
+
+    async function toggleReserve(id) {
+      const target = items.find(i => i.id === id);
+      if (!target) return;
+
+      if (isFirebaseConfigured && db) {
+        await db.collection('wishlist').doc(id).update({ reserved: !target.reserved });
+      } else {
+        target.reserved = !target.reserved;
+        saveLocal();
+        render();
+      }
+    }
+
+    async function deleteWish(id) {
+      if (!confirm('¿Seguro que deseas eliminar este deseo de la lista?')) return;
+
+      if (isFirebaseConfigured && db) {
+        await db.collection('wishlist').doc(id).delete();
+      } else {
+        items = items.filter(i => i.id !== id);
+        saveLocal();
+        render();
+      }
+    }
+
+    function priorityLabel(p) {
+      if (p === 'alta') return { text: '🔥 Lo quiero mucho', cls: 'prio-alta' };
+      if (p === 'baja') return { text: '💡 Idea casual', cls: 'prio-baja' };
+      return { text: '✨ Me encantaría', cls: 'prio-media' };
+    }
+
+    function render() {
+      const grid = document.getElementById('wishlistGrid');
+      const filterPrio = document.getElementById('filterPriority').value;
+
+      const ownerItems = items.filter(i => i.owner === currentOwner);
+      const filtered = ownerItems.filter(i => filterPrio === 'todas' || i.priority === filterPrio);
+
+      document.getElementById('statTotal').textContent = ownerItems.length;
+      document.getElementById('statReserved').textContent = ownerItems.filter(i => i.reserved).length;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <h3>Aún no hay deseos aquí ✨</h3>
+            <p style="margin-top: 0.4rem;">Haz clic en <strong>"+ Agregar deseo"</strong> para añadir el primero.</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => {
+        const prio = priorityLabel(item.priority);
+        const imgBlock = item.image
+          ? `<img class="card-img" src="${item.image}" alt="${item.title}" onerror="this.outerHTML='<div class=\\'card-img\\'>🎁</div>'">`
+          : `<div class="card-img">🎁</div>`;
+
+        return `
+          <article class="card ${item.reserved ? 'reserved' : ''}">
+            ${imgBlock}
+            <div class="card-body">
+              <div class="card-meta">
+                <span class="pill ${prio.cls}">${prio.text}</span>
+                ${item.price ? `<span class="price">${item.price}</span>` : ''}
+              </div>
+              <h3 class="card-title">${item.title}</h3>
+              <p class="card-notes">${item.notes || 'Sin notas adicionales.'}</p>
+
+              <div class="card-footer">
+                ${item.link ? `<a href="${item.link}" target="_blank" rel="noopener" class="btn-sm btn-link">Ver tienda ↗</a>` : ''}
+                <button class="btn-sm btn-reserve ${item.reserved ? 'active' : ''}" onclick="toggleReserve('${item.id}')">
+                  ${item.reserved ? '✓ Regalo apartado' : 'Apartar regalo'}
+                </button>
+                <button class="btn-delete" title="Eliminar" onclick="deleteWish('${item.id}')">🗑</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
